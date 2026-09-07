@@ -1,5 +1,6 @@
 
-import  TRANSACTION_DATA from './api/mock_data';
+import {TRANSACTION_DATA} from './api/mock_data';
+import PlacesList from './components/places/PlacesList';
 import Transaction from './components/transactions/Transaction';
 import type { Transaction as TransactionType } from './types';
 
@@ -13,6 +14,7 @@ function App() {
         <Transaction key={trans.id} {...trans} />
       ))
       }
+      <PlacesList />
     </div >
   );
 }
