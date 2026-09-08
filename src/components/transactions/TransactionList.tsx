@@ -1,14 +1,39 @@
-import Transaction from './Transaction';
 import { TRANSACTION_DATA } from '../../api/mock_data';
 import type { Transaction as TransactionType } from '../../types';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { useState } from 'react';
+import TransactionsTable from './TransactionsTable';
 
 export default function TransactionList() {
+  const [text, setText] = useState('');
+  const [search, setSearch] = useState('');
+
+
+  const filteredTransactions = TRANSACTION_DATA.filter((t: TransactionType) => {
+    console.log('filtering...');
+    return t.place.name.toLowerCase().includes(search.toLowerCase());
+  });
+
   return (
     <>
       <h1 className='text-2xl font-semibold mb-6'>Transactions</h1>
-      {TRANSACTION_DATA.map((trans: TransactionType) => (
-        <Transaction key={trans.id} {...trans} />
-      ))}
+
+      <div className='flex justify-between mb-4 gap-2'>
+        <div className='flex gap-2 w-1/2'>
+          <Input
+            type='search'
+            placeholder='Search by place…'
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+          />
+          <Button variant='outline' onClick={() => setSearch(text)}>
+            Search
+          </Button>
+        </div>
+      </div>
+
+      <TransactionsTable transactions={filteredTransactions} />
     </>
   );
 }
