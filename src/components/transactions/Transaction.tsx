@@ -1,13 +1,9 @@
 import type { Transaction as TransactionType } from '../../types';
-import { TableRow, TableCell } from '../ui/table';
+import { TableRow, TableCell } from '@/components/ui/table';
+import { LocalizedDate } from '../LocalizedDate';
 
 type TransactionProps = TransactionType;
 
-const dateFormat = new Intl.DateTimeFormat('nl-BE', {
-  day: '2-digit',
-  month: '2-digit',
-  year: 'numeric',
-});
 
 const amountFormat = new Intl.NumberFormat('nl-BE', {
   currency: 'EUR',
@@ -24,7 +20,7 @@ export default function Transaction({
 }: TransactionProps) {
   return (
     <TableRow>
-      <TableCell>{dateFormat.format(new Date(date))}</TableCell>
+      <TableCell><LocalizedDate date={date} /></TableCell>
       <TableCell>{user.name}</TableCell>
       <TableCell>{place.name}</TableCell>
       <TableCell>{amountFormat.format(amount)}</TableCell>
