@@ -9,6 +9,11 @@ const PlacesList = () => {
     setPlaces((places) => places.filter((p) => p.id !== id));
   };
 
+  const handleRatePlace = (id: number, rating: number) => {
+    const newPlaces = places.map((p) => (p.id === id ? { ...p, rating } : p));
+    setPlaces(newPlaces);
+  };
+
   return (
     <>
       <h1 className='text-2xl font-semibold mb-6'>Places</h1>
@@ -18,7 +23,7 @@ const PlacesList = () => {
             a.name.toUpperCase().localeCompare(b.name.toUpperCase()),
           )
           .map((p) => (
-            <Place key={p.id} {...p} onDelete={handleDeletePlace} />
+            <Place key={p.id} {...p} onDelete={handleDeletePlace} onRate={handleRatePlace} />
           ))}
       </div>
     </>
