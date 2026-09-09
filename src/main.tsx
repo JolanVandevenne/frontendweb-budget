@@ -7,6 +7,7 @@ import TransactionList from './pages/transactions/TransactionList.tsx';
 import PlacesList from './pages/places/PlacesList';
 import About, { History, Location, Services } from './pages/about/About.tsx';
 import NotFound from './pages/NotFound';
+import PlaceDetail from './pages/places/PlaceDetail.tsx';
 
 
 const router = createBrowserRouter([
@@ -15,7 +16,19 @@ const router = createBrowserRouter([
     element: <App />,
   },
   { path: '/transactions', element: <TransactionList /> },
-  { path: '/places', element: <PlacesList /> },
+  {
+    path: '/places',
+    children: [
+      {
+        index: true,
+        element: <PlacesList />,
+      },
+      {
+        path: ':id',
+        element: <PlaceDetail />,
+      },
+    ],
+  },
   {
     path: '/about',
     element: <About />,
