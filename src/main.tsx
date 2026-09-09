@@ -4,7 +4,7 @@ import './index.css';
 import { Navigate, RouterProvider, createBrowserRouter } from 'react-router';
 import TransactionList from './pages/transactions/TransactionList.tsx';
 import PlacesList from './pages/places/PlacesList';
-import About, { History, Location, Services } from './pages/about/About.tsx';
+import About, { History, Location, Services } from './pages/about/AboutTabs.tsx';
 import NotFound from './pages/NotFound';
 import PlaceDetail from './pages/places/PlaceDetail.tsx';
 
