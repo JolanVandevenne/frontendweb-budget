@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { PLACE_DATA } from '../../api/mock_data';
-import Place from './Place';
+import Place from '../../components/places/Place';
 
 const PlacesList = () => {
   const [places, setPlaces] = useState(PLACE_DATA);
