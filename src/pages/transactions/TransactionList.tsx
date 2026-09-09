@@ -1,38 +1,49 @@
 // src/pages/TransactionList.tsx
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import TransactionsTable from '../../components/transactions/TransactionsTable';
 import type { Transaction } from '../../types';
 import AsyncData from '../../components/AsyncData';
 import useSWR from 'swr';
-import useSWRMutation from 'swr/mutation'; // 👈 1
-import { deleteById, getAll } from '../../api'; // 👈 1
+import useSWRMutation from 'swr/mutation';
+import { deleteById, getAll } from '../../api';
 import { toast } from 'sonner';
+import type { KeyboardEvent, ChangeEvent } from 'react';
+import { Button } from '@/components/ui/button';
+
 
 
 export default function TransactionList() {
   const [text, setText] = useState('');
   const [search, setSearch] = useState('');
 
-  const { data, isLoading, error } = useSWR<Transaction[]>(
-    'transactions',
-    getAll,
+  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setText(e.target.value);
+
+    if (e.target.value === '') {
+      setSearch('');
+    }
+  };
+
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      setSearch(text);
+    }
+  };
+
+  const { data, isLoading, error, mutate } = useSWR(
+    `transactions?${search ? `search=${search}` : ''}`,
+    getAll<Transaction[]>,
   );
 
   const {
     trigger: deleteTransaction, error: deleteError,
-  } = useSWRMutation('transactions', deleteById); // 👈 1
-
-
-  const filteredTransactions =
-    data?.filter((t) =>
-      t.place.name.toLowerCase().includes(search.toLowerCase()),
-    ) ?? [];
+  } = useSWRMutation('transactions', deleteById);
 
 
   const handleDeleteTransaction = async (id: number) => {
     await deleteTransaction(id);
+    await mutate();
     toast.success('Transaction removed');
   };
 
@@ -46,16 +57,16 @@ export default function TransactionList() {
             type='search'
             placeholder='Search by place…'
             value={text}
-            onChange={(e) => setText(e.target.value)}
-          />
-          <Button variant='outline' onClick={() => setSearch(text)}>
+            onChange={handleSearchChange}
+            onKeyDown={handleKeyDown} />
+          <Button variant="outline" onClick={() => setSearch(text)} className='w-24'>
             Search
           </Button>
         </div>
       </div>
 
       <AsyncData loading={isLoading} error={error ?? deleteError} hasData={data !== undefined}>
-        <TransactionsTable transactions={filteredTransactions} onDelete={handleDeleteTransaction} />
+        <TransactionsTable transactions={data} onDelete={handleDeleteTransaction} />
       </AsyncData>
     </>
   );
