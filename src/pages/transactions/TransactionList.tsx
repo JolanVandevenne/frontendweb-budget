@@ -10,23 +10,7 @@ import { deleteById, getAllWithPaging } from '../../api';
 import { toast } from 'sonner';
 import type { KeyboardEvent, ChangeEvent } from 'react';
 import { Button } from '@/components/ui/button';
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationNext,
-  PaginationPrevious,
-} from '@/components/ui/pagination';
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { Field, FieldLabel } from '@/components/ui/field';
-import { cn } from '@/lib/utils';
+import PaginationControls from '../../components/PaginationControls';
 
 
 
@@ -70,22 +54,9 @@ export default function TransactionList() {
     toast.success('Transaction removed');
   };
 
-  const handlePageSizeChange = (newPageSize: number) => {
-    setPageSize(newPageSize);
-    setPage(1);
-  };
+  const totalPages = data ? Math.ceil(data.total / pageSize) : 1;
 
-  const hasNextPage = data !== undefined && page * pageSize < data.total;
 
-  const handlePreviousPage = () => {
-    setPage((prev) => Math.max(1, prev - 1));
-  };
-
-  const handleNextPage = () => {
-    if (hasNextPage) {
-      setPage((prev) => prev + 1);
-    }
-  };
 
   return (
     <>
@@ -107,51 +78,14 @@ export default function TransactionList() {
 
       <AsyncData loading={isLoading} error={error ?? deleteError} hasData={data !== undefined}>
         <TransactionsTable transactions={data?.items} onDelete={handleDeleteTransaction} />
-        <div className='flex items-center justify-between gap-4 mt-4'>
-          <Field orientation='horizontal' className='w-fit'>
-            <FieldLabel htmlFor='select-rows-per-page'>Rows per page</FieldLabel>
-            <Select
-              value={pageSize}
-              onValueChange={(value) => handlePageSizeChange(Number(value))}
-            >
-              <SelectTrigger className='w-20' id='select-rows-per-page'>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent align='start'>
-                <SelectGroup>
-                  <SelectItem value='2'>2</SelectItem>
-                  <SelectItem value='10'>10</SelectItem>
-                  <SelectItem value='25'>25</SelectItem>
-                  <SelectItem value='50'>50</SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </Field>
-          <Pagination className='mx-0 w-auto'>
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious
-                  href='#'
-                  onClick={handlePreviousPage}
-                  aria-disabled={page === 1}
-                  className={cn(page === 1 && 'pointer-events-none opacity-50')}
-                />
-              </PaginationItem>
-              <PaginationItem>
-                {data?.total
-                  ? `Page ${page} of ${Math.ceil(data.total / pageSize)}`
-                  : ''}
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationNext
-                  href='#'
-                  onClick={handleNextPage}
-                  aria-disabled={!hasNextPage}
-                  className={cn(!hasNextPage && 'pointer-events-none opacity-50')}
-                />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
+        <div className='mt-4'>
+          <PaginationControls
+            page={page}
+            totalPages={totalPages}
+            pageSize={pageSize}
+            onPageChange={setPage}
+            onPageSizeChange={setPageSize}
+          />
         </div>
       </AsyncData>
     </>
