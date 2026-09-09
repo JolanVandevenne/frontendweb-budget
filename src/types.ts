@@ -16,3 +16,10 @@ export interface Transaction {
   user: User;
   place: Place;
 }
+
+export interface PaginatedResponse<T> {
+  items: T[];
+  total: number;
+  pageSize: number;
+  page: number;
+}
