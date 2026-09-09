@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 function App() {
   return (
     <div className='bg-white text-gray-900 m-3'>
-      <h1 className='text-2xl font-bold text-center mb-4'>My Budget App</h1>
+      <h1>My Budget App</h1>
       <p>Choose one of the following links:</p>
       <ul>
         <li>

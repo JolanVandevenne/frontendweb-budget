@@ -19,7 +19,7 @@ const About = () => {
 
   return (
     <div className='space-y-8'>
-      <h1 className='text-2xl font-semibold mb-6'>About</h1>
+      <h1>About</h1>
       <div>
         <p className='text-muted-foreground leading-relaxed'>
           This website gives you a clear and friendly way to keep track of your
@@ -55,7 +55,7 @@ export default About;
 export const Services = () => {
   return (
     <>
-      <h1 className='text-2xl font-semibold mb-6'>Services</h1>
+      <h1>Services</h1>
       <p className='text-muted-foreground leading-relaxed max-w-2xl'>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
         posuere erat a ante venenatis dapibus posuere velit aliquet.
@@ -67,7 +67,7 @@ export const Services = () => {
 export const History = () => {
   return (
     <>
-      <h1 className='text-2xl font-semibold mb-6'>History</h1>
+      <h1>History</h1>
       <p className='text-muted-foreground leading-relaxed max-w-2xl'>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras mattis
         consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed
@@ -80,7 +80,7 @@ export const History = () => {
 export const Location = () => {
   return (
     <>
-      <h1 className='text-2xl font-semibold mb-6'>Location</h1>
+      <h1>Location</h1>
       <p className='text-muted-foreground leading-relaxed max-w-2xl'>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sed odio
         dui. Maecenas faucibus mollis interdum. Nullam id dolor id nibh

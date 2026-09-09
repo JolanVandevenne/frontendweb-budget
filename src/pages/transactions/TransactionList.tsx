@@ -17,7 +17,7 @@ export default function TransactionList() {
 
   return (
     <>
-      <h1 className='text-2xl font-semibold mb-6'>Transactions</h1>
+      <h1>Transactions</h1>
 
       <div className='flex justify-between mb-4 gap-2'>
         <div className='flex gap-2 w-1/2'>

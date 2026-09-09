@@ -12,7 +12,7 @@ export default function NotFound() {
 
   return (
     <>
-      <h1 className='text-3xl font-semibold mb-4'>Not found</h1>
+      <h1>Not found</h1>
       <Alert variant='destructive'>
         <AlertDescription>
           There is nothing at {pathname},<br />
