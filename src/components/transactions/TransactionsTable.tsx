@@ -11,9 +11,10 @@ import type { Transaction as TransactionType } from '../../types';
 
 interface TransactionsTableProps {
   transactions?: TransactionType[];
+  onDelete?: (id: number) => void;
 }
 
-function TransactionsTable({ transactions }: TransactionsTableProps) {
+function TransactionsTable({ transactions, onDelete }: TransactionsTableProps) {
   if (!transactions) return null;
 
   if (transactions.length === 0) {
@@ -36,11 +37,12 @@ function TransactionsTable({ transactions }: TransactionsTableProps) {
             <TableHead>User</TableHead>
             <TableHead>Place</TableHead>
             <TableHead>Amount</TableHead>
+            <TableHead />
           </TableRow>
         </TableHeader>
         <TableBody>
           {transactions.map((transaction: TransactionType) => (
-            <Transaction key={transaction.id} {...transaction} />
+            <Transaction key={transaction.id} {...transaction} onDelete={onDelete} />
           ))}
         </TableBody>
       </Table>

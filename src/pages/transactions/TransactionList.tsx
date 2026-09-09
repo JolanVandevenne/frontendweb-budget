@@ -6,7 +6,10 @@ import TransactionsTable from '../../components/transactions/TransactionsTable';
 import type { Transaction } from '../../types';
 import AsyncData from '../../components/AsyncData';
 import useSWR from 'swr';
-import { getAll } from '../../api';
+import useSWRMutation from 'swr/mutation'; // 👈 1
+import { deleteById, getAll } from '../../api'; // 👈 1
+import { toast } from 'sonner';
+
 
 export default function TransactionList() {
   const [text, setText] = useState('');
@@ -17,10 +20,21 @@ export default function TransactionList() {
     getAll,
   );
 
+  const {
+    trigger: deleteTransaction, error: deleteError,
+  } = useSWRMutation('transactions', deleteById); // 👈 1
+
+
   const filteredTransactions =
     data?.filter((t) =>
       t.place.name.toLowerCase().includes(search.toLowerCase()),
     ) ?? [];
+
+
+  const handleDeleteTransaction = async (id: number) => {
+    await deleteTransaction(id);
+    toast.success('Transaction removed');
+  };
 
   return (
     <>
@@ -40,8 +54,8 @@ export default function TransactionList() {
         </div>
       </div>
 
-      <AsyncData loading={isLoading} error={error}>
-        <TransactionsTable transactions={filteredTransactions} />
+      <AsyncData loading={isLoading} error={error ?? deleteError} hasData={data !== undefined}>
+        <TransactionsTable transactions={filteredTransactions} onDelete={handleDeleteTransaction} />
       </AsyncData>
     </>
   );

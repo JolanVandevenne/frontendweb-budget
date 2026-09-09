@@ -7,3 +7,10 @@ export async function getAll<T>(url: string): Promise<T> {
 
   return data.items;
 }
+
+export const deleteById = async (
+  url: string,
+  { arg: id }: { arg: number },
+): Promise<void> => {
+  await axios.delete(`${baseUrl}/${url}/${id}`);
+};
