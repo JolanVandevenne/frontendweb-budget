@@ -1,7 +1,6 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
-import App from './App.tsx';
 import { Navigate, RouterProvider, createBrowserRouter } from 'react-router';
 import TransactionList from './pages/transactions/TransactionList.tsx';
 import PlacesList from './pages/places/PlacesList';
@@ -9,53 +8,59 @@ import About, { History, Location, Services } from './pages/about/About.tsx';
 import NotFound from './pages/NotFound';
 import PlaceDetail from './pages/places/PlaceDetail.tsx';
 
-
+import Layout from './components/Layout.tsx';
+// ...
 const router = createBrowserRouter([
   {
-    path: '/',
-    element: <App />,
-  },
-  { path: '/transactions', element: <TransactionList /> },
-  {
-    path: '/places',
+    element: <Layout />,
     children: [
       {
-        index: true,
-        element: <PlacesList />,
+        path: '/',
+        element: <Navigate replace to='/transactions' />,
+      },
+      { path: '/transactions', element: <TransactionList /> },
+      {
+        path: '/places',
+        children: [
+          {
+            index: true,
+            element: <PlacesList />,
+          },
+          {
+            path: ':id',
+            element: <PlaceDetail />,
+          },
+        ],
       },
       {
-        path: ':id',
-        element: <PlaceDetail />,
+        path: '/about',
+        element: <About />,
+        children: [
+          {
+            index: true,
+            element: <Navigate to='/about/services' replace />,
+          },
+          {
+            path: 'services',
+            element: <Services />,
+          },
+          {
+            path: 'history',
+            element: <History />,
+          },
+          {
+            path: 'location',
+            element: <Location />,
+          },
+        ],
       },
-    ],
-  },
-  {
-    path: '/about',
-    element: <About />,
-    children: [
       {
-        index: true,
+        path: '/services',
         element: <Navigate to='/about/services' replace />,
       },
-      {
-        path: 'services',
-        element: <Services />,
-      },
-      {
-        path: 'history',
-        element: <History />,
-      },
-      {
-        path: 'location',
-        element: <Location />,
-      },
+      { path: '*', element: <NotFound /> },
     ],
   },
-  {
-    path: '/services',
-    element: <Navigate to='/about/services' replace />,
-  },
-  { path: '*', element: <NotFound /> },
 ]);
 
 createRoot(document.getElementById('root')!).render(
