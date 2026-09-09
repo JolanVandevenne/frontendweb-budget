@@ -1,19 +1,26 @@
-import { TRANSACTION_DATA } from '../../api/mock_data';
-import type { Transaction as TransactionType } from '../../types';
+// src/pages/TransactionList.tsx
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import TransactionsTable from '../../components/transactions/TransactionsTable';
+import type { Transaction } from '../../types';
+import AsyncData from '../../components/AsyncData';
+import useSWR from 'swr';
+import { getAll } from '../../api';
 
 export default function TransactionList() {
   const [text, setText] = useState('');
   const [search, setSearch] = useState('');
 
+  const { data, isLoading, error } = useSWR<Transaction[]>(
+    'transactions',
+    getAll,
+  );
 
-  const filteredTransactions = TRANSACTION_DATA.filter((t: TransactionType) => {
-    console.log('filtering...');
-    return t.place.name.toLowerCase().includes(search.toLowerCase());
-  });
+  const filteredTransactions =
+    data?.filter((t) =>
+      t.place.name.toLowerCase().includes(search.toLowerCase()),
+    ) ?? [];
 
   return (
     <>
@@ -33,7 +40,9 @@ export default function TransactionList() {
         </div>
       </div>
 
-      <TransactionsTable transactions={filteredTransactions} />
+      <AsyncData loading={isLoading} error={error}>
+        <TransactionsTable transactions={filteredTransactions} />
+      </AsyncData>
     </>
   );
 }
