@@ -31,7 +31,7 @@ export default function Transaction({ id,
   };
 
   return (
-    <TableRow>
+    <TableRow data-testid="transaction">
       <TableCell><LocalizedDate date={date} /></TableCell>
       <TableCell>{user.name}</TableCell>
       <TableCell>{place.name}</TableCell>

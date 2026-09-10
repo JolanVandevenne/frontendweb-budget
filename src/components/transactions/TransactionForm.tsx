@@ -105,12 +105,14 @@ export default function TransactionForm({ places = [], transaction = EMPTY_TRANS
               name='userId'
               placeholder='user id'
               type='number'
+              data-testid="user-input"
             />
             <LabelInput
               label='amount'
               name='amount'
               placeholder='0.00'
               type='number'
+              data-testid="amount-input"
             />
             <LabelSelectList
               label='Place'
@@ -122,6 +124,7 @@ export default function TransactionForm({ places = [], transaction = EMPTY_TRANS
               label='Date'
               name='date'
               placeholder='Pick a date'
+              testId="date-picker-trigger"
             />
           </FieldGroup>
           <div className="flex justify-end gap-2 pt-6">

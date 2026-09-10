@@ -18,12 +18,14 @@ interface LabelDatePickerFieldProps extends Omit<
   label: string;
   name: string;
   placeholder?: string;
+  testId?: string;
 }
 
 const LabelDatePicker = ({
   label,
   name,
   placeholder = 'Pick a date',
+  testId,
   ...rest
 }: LabelDatePickerFieldProps) => {
   const { control, formState: { isSubmitting } } = useFormContext();
@@ -42,6 +44,7 @@ const LabelDatePicker = ({
                   variant='outline'
                   data-empty={!field.value}
                   className='justify-start text-left font-normal data-[empty=true]:text-muted-foreground'
+                  data-testid={testId}
                 />
               }
               className='flex w-full justify-between'
