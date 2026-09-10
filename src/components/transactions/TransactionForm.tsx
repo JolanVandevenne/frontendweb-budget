@@ -1,6 +1,6 @@
 import type { Place, Transaction } from '../../types';
 import * as z from 'zod';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Field,
@@ -8,7 +8,6 @@ import {
   FieldGroup,
   FieldError,
 } from '@/components/ui/field';
-import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
@@ -30,6 +29,7 @@ import Error from '../Error';
 import { Link, useNavigate } from 'react-router';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import LabelInput from '../LabelInput';
 
 interface TransactionFormProps {
   places?: Place[];
@@ -113,124 +113,99 @@ export default function TransactionForm({ places = [], transaction = EMPTY_TRANS
   return (
     <>
       <Error error={saveError} />
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        <FieldGroup>
-          <Controller
-            control={form.control}
-            name='userId'
-            render={(
-              { field, fieldState },
-            ) => (
-              <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor={field.name}>User Id</FieldLabel>
-                <Input
-                  {...field}
-                  id={field.name}
-                  type='number'
-                  onChange={(e) => field.onChange(e.target.valueAsNumber)}
-                />
-                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-              </Field>
-            )}
-          />
-
-          <Controller
-            control={form.control}
-            name='amount'
-            render={(
-              { field, fieldState },
-            ) => (
-              <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor={field.name}>Amount</FieldLabel>
-                <Input
-                  {...field}
-                  id={field.name}
-                  type='number'
-                  placeholder='0.00'
-                  onChange={(e) => field.onChange(e.target.valueAsNumber)}
-                />
-                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-              </Field>
-            )}
-          />
-
-          <Controller
-            control={form.control}
-            name="placeId"
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor={field.name}>Place</FieldLabel>
-                <Select
-                  value={field.value || null}
-                  items={placesSelectItems}
-                  onValueChange={field.onChange}
-                  onOpenChange={() => field.onBlur()}
-                >
-                  <SelectTrigger id={field.name} className="w-45">
-                    <SelectValue placeholder="Place" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {placesSelectItems.map((item) => (
-                      <SelectItem key={item.value} value={item.value}>
-                        {item.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-              </Field>
-            )}
-          />
-
-          <Controller
-            control={form.control}
-            name='date'
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
-                <FieldLabel id={field.name}>Date</FieldLabel>
-                <Popover>
-                  <PopoverTrigger
-                    render={
-                      <Button
-                        variant='outline'
-                        data-empty={!field.value}
-                        className='justify-start text-left font-normal data-[empty=true]:text-muted-foreground'
-                      />
-                    }
-                    className='flex w-full justify-between'
+      <FormProvider {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <FieldGroup>
+            <LabelInput
+              label='User Id'
+              name='userId'
+              placeholder='user id'
+              type='number'
+            />
+            <LabelInput
+              label='amount'
+              name='amount'
+              placeholder='0.00'
+              type='number'
+            />
+            <Controller
+              control={form.control}
+              name="placeId"
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor={field.name}>Place</FieldLabel>
+                  <Select
+                    value={field.value || null}
+                    items={placesSelectItems}
+                    onValueChange={field.onChange}
+                    onOpenChange={() => field.onBlur()}
                   >
-                    {field.value ? (
-                      <LocalizedDate date={field.value} />
-                    ) : (
-                      <span>Pick a date</span>
-                    )}
-                    <ChevronDownIcon className='size-4' />
-                  </PopoverTrigger>
-                  <PopoverContent className='w-auto p-0'>
-                    <Calendar
-                      mode='single'
-                      selected={field.value}
-                      onSelect={field.onChange}
-                      weekStartsOn={1}
-                      disabled={{ after: new Date() }}
-                    />
-                  </PopoverContent>
-                </Popover>
-                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-              </Field>
-            )}
-          />
+                    <SelectTrigger id={field.name} className="w-45">
+                      <SelectValue placeholder="Place" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {placesSelectItems.map((item) => (
+                        <SelectItem key={item.value} value={item.value}>
+                          {item.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                </Field>
+              )}
+            />
 
-        </FieldGroup>
-        <div className="flex justify-end gap-2 pt-6">
-          <Button type="submit">
-            {transaction?.id ? 'Save transaction' : 'Add transaction'}
-          </Button>
-          <Link to="/transactions" className={cn(buttonVariants({ variant: 'outline' }))}>
-            Cancel
-          </Link>
-        </div>
-      </form>
+            <Controller
+              control={form.control}
+              name='date'
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel id={field.name}>Date</FieldLabel>
+                  <Popover>
+                    <PopoverTrigger
+                      render={
+                        <Button
+                          variant='outline'
+                          data-empty={!field.value}
+                          className='justify-start text-left font-normal data-[empty=true]:text-muted-foreground'
+                        />
+                      }
+                      className='flex w-full justify-between'
+                    >
+                      {field.value ? (
+                        <LocalizedDate date={field.value} />
+                      ) : (
+                        <span>Pick a date</span>
+                      )}
+                      <ChevronDownIcon className='size-4' />
+                    </PopoverTrigger>
+                    <PopoverContent className='w-auto p-0'>
+                      <Calendar
+                        mode='single'
+                        selected={field.value}
+                        onSelect={field.onChange}
+                        weekStartsOn={1}
+                        disabled={{ after: new Date() }}
+                      />
+                    </PopoverContent>
+                  </Popover>
+                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                </Field>
+              )}
+            />
+
+          </FieldGroup>
+          <div className="flex justify-end gap-2 pt-6">
+            <Button type="submit">
+              {transaction?.id ? 'Save transaction' : 'Add transaction'}
+            </Button>
+            <Link to="/transactions" className={cn(buttonVariants({ variant: 'outline' }))}>
+              Cancel
+            </Link>
+          </div>
+        </form>
+      </FormProvider>
 
     </>
   );
