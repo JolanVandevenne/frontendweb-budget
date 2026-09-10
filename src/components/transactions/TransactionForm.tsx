@@ -1,4 +1,4 @@
-import type { Place } from '../../types';
+import type { Place, Transaction } from '../../types';
 import * as z from 'zod';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -9,7 +9,6 @@ import {
   FieldError,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
 import {
   Select,
   SelectContent,
@@ -28,10 +27,22 @@ import { LocalizedDate } from '../LocalizedDate';
 import useSWRMutation from 'swr/mutation';
 import { save } from '../../api';
 import Error from '../Error';
+import { Link, useNavigate } from 'react-router';
+import { Button, buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 interface TransactionFormProps {
   places?: Place[];
+  transaction?: Transaction;
 }
+
+const EMPTY_TRANSACTION: Partial<Transaction> = {
+  id: undefined,
+  amount: 0,
+  date: new Date().toISOString(),
+  place: { id: 0, name: '', rating: 0 },
+  user: { id: 0, name: '' },
+};
 
 const formSchema = z.object({
   userId: z
@@ -54,30 +65,42 @@ const formSchema = z.object({
 
 type TransactionFormValues = z.infer<typeof formSchema>;
 
-export default function TransactionForm({ places = [] }: TransactionFormProps) {
+export default function TransactionForm({ places = [], transaction = EMPTY_TRANSACTION as Transaction }: TransactionFormProps,) {
+  const navigate = useNavigate();
+
   const { trigger: saveTransaction, error: saveError } = useSWRMutation('transactions', save);
 
   const form = useForm<TransactionFormValues>({
     mode: 'onBlur',
     resolver: zodResolver(formSchema),
     defaultValues: {
-      userId: 0,
-      amount: 0,
-      placeId: 0,
-      date: new Date()
+      date: transaction?.date ? new Date(transaction.date) : new Date(),
+      placeId: transaction?.place.id,
+      amount: transaction?.amount ?? 0,
+      userId: transaction?.user.id
     },
+    values: transaction
+      ? {
+        date: transaction?.date ? new Date(transaction.date) : new Date(),
+        placeId: transaction.place.id,
+        amount: transaction.amount,
+        userId: transaction.user.id
+      }
+      : undefined,
   });
+
   const { isValid } = form.formState;
 
   const onSubmit = async (values: TransactionFormValues) => {
     if (!isValid) return;
     await saveTransaction(
       {
+        id: transaction?.id,
         ...values,
       },
       {
         throwOnError: false,
-        onSuccess: () => form.reset()
+        onSuccess: () => { navigate('/transactions') }
       },
     );
   };
@@ -199,8 +222,13 @@ export default function TransactionForm({ places = [] }: TransactionFormProps) {
           />
 
         </FieldGroup>
-        <div className='flex justify-end gap-2 pt-6'>
-          <Button type='submit'>Add transaction</Button>
+        <div className="flex justify-end gap-2 pt-6">
+          <Button type="submit">
+            {transaction?.id ? 'Save transaction' : 'Add transaction'}
+          </Button>
+          <Link to="/transactions" className={cn(buttonVariants({ variant: 'outline' }))}>
+            Cancel
+          </Link>
         </div>
       </form>
 
