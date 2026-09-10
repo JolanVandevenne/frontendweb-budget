@@ -1,7 +1,6 @@
 import { StarIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { ThemeContext } from '../../contexts/theme';
-import { useContext } from 'react';
+import { useTheme } from '../../contexts/theme';
 
 interface StarProps {
   index: number;
@@ -10,7 +9,7 @@ interface StarProps {
 }
 
 function Star({ index, selected = false, onSelect = () => { } }: StarProps) {
-  const { isDark } = useContext(ThemeContext);
+  const { isDark } = useTheme();
   const handleClick = () => {
     onSelect(index + 1);
   };

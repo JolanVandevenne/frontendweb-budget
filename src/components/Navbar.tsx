@@ -7,8 +7,7 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
 } from '@/components/ui/navigation-menu';
-import { useContext } from 'react';
-import { ThemeContext } from '../contexts/theme';
+import { useTheme } from '../contexts/theme';
 import { PiggyBankIcon, Moon, Sun, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -19,7 +18,7 @@ const links = [
 ];
 
 const ThemeToggle = () => {
-  const { isDark, toggleTheme } = useContext(ThemeContext);
+  const { isDark, toggleTheme } = useTheme();
   return (
     <Button
       variant='ghost'
