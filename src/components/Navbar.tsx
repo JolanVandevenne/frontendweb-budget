@@ -1,19 +1,36 @@
 // src/components/Navbar.tsx
 import { Link, NavLink, useLocation } from 'react-router';
 import { useState } from 'react';
-import { PiggyBankIcon, Menu, X } from 'lucide-react';
 import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
 } from '@/components/ui/navigation-menu';
+import { useContext } from 'react';
+import { ThemeContext } from '../contexts/theme';
+import { PiggyBankIcon, Moon, Sun, Menu, X } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 const links = [
   { to: '/transactions', label: 'Transactions' },
   { to: '/places', label: 'Places' },
   { to: '/about', label: 'About' },
 ];
+
+const ThemeToggle = () => {
+  const { isDark, toggleTheme } = useContext(ThemeContext);
+  return (
+    <Button
+      variant='ghost'
+      size='icon'
+      onClick={toggleTheme}
+      aria-label='Toggle theme'
+    >
+      {isDark ? <Moon className='h-4 w-4' /> : <Sun className='h-4 w-4' />}
+    </Button>
+  );
+};
 
 function NavMenu({ vertical = false }: { vertical?: boolean }) {
   const { pathname } = useLocation();
@@ -54,6 +71,9 @@ export default function Navbar() {
         <div className="hidden md:flex flex-1">
           <NavMenu />
         </div>
+        <div className="hidden md:flex items-center gap-2 ml-auto">
+          <ThemeToggle />
+        </div>
 
         <button
           className="ml-auto md:hidden"
@@ -68,6 +88,9 @@ export default function Navbar() {
         <div className="border-t md:hidden bg-background">
           <div className="container mx-auto px-4 py-4 max-w-5xl">
             <NavMenu vertical />
+            <div className="flex items-center gap-2 pt-2 border-t w-full">
+              <ThemeToggle />
+            </div>
           </div>
         </div>
       )}

@@ -9,6 +9,7 @@ import NotFound from './pages/NotFound';
 import PlaceDetail from './pages/places/PlaceDetail.tsx';
 import Layout from './components/Layout.tsx';
 import AddOrEditTransaction from './pages/transactions/AddOrEditTransaction.tsx';
+import { ThemeProvider } from './contexts/theme/Theme.context.tsx';
 
 const router = createBrowserRouter([
   {
@@ -81,6 +82,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <ThemeProvider>
+      <RouterProvider router={router} />
+    </ThemeProvider>
   </StrictMode>,
 );
