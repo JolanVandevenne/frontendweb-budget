@@ -1,12 +1,23 @@
 // src/pages/places/PlaceDetail.tsx
 import { useParams } from 'react-router';
-import { PLACE_DATA } from '../../api/mock_data';
+import useSWR from 'swr';
+import { getById } from '../../api';
+import AsyncData from '../../components/AsyncData';
+import TransactionsTable from '../../components/transactions/TransactionsTable';
+import type { Place } from '../../types';
 
 const PlaceDetail = () => {
   const { id } = useParams<{ id: string }>();
   const idAsNumber = Number(id);
 
-  const place = PLACE_DATA.find((p) => p.id === idAsNumber);
+  const {
+    data: place,
+    error: placeError,
+    isLoading: placeLoading,
+  } = useSWR<Place & { transactions: import('../../types').Transaction[] }>(
+    id ? `places/${idAsNumber}` : null,
+    getById,
+  );
 
   if (!place) {
     return (
@@ -18,10 +29,10 @@ const PlaceDetail = () => {
   }
 
   return (
-    <>
+    <AsyncData loading={placeLoading} error={placeError}>
       <h1>Place {place.name}</h1>
-      <p>Transactions for {place.name} will appear here.</p>
-    </>
+      <TransactionsTable transactions={place.transactions} />
+    </AsyncData>
   );
 };
 

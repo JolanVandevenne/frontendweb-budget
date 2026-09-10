@@ -6,19 +6,18 @@ import { Trash2 } from 'lucide-react';
 import { Link } from 'react-router';
 
 interface PlaceProps extends PlaceType {
-  onDelete: (id: number) => void;
-  onRate: (id: number, newRating: number) => void;
+  onDelete: (id: number) => Promise<void>;
+  onRate: (data: { id: number; name: string; rating: number }) => Promise<void>;
 }
-
 const Place = ({ id, name, rating, onDelete, onRate }: PlaceProps) => {
 
-  const handleRate = (newRating: number) => {
-    onRate(id, newRating);
-  };
+  const handleRate = async (newRating: number) => {
+    await onRate({ id, name, rating: newRating });
+  }
 
   const handleDelete = () => {
     onDelete(id);
-  };
+  }
 
   return (
     <Card>

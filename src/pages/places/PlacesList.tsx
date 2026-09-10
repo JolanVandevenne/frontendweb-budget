@@ -1,33 +1,35 @@
-import { useState } from 'react';
-import { PLACE_DATA } from '../../api/mock_data';
-import Place from '../../components/places/Place';
+import useSWR from 'swr';
+import useSWRMutation from 'swr/mutation';
+import PlacesCards from '../../components/places/PlacesCards';
+import { getAll, deleteById, updateById } from '../../api';
+import AsyncData from '../../components/AsyncData';
+import type { Place } from '../../types';
 
-const PlacesList = () => {
-  const [places, setPlaces] = useState(PLACE_DATA);
+export default function PlacesList() {
+  const {
+    data, error, isLoading,
+  } = useSWR<Place[]>('places', getAll);
 
-  const handleDeletePlace = (id: number) => {
-    setPlaces((places) => places.filter((p) => p.id !== id));
-  };
+  const { trigger: deletePlace, error: deleteError } = useSWRMutation('places', deleteById);
 
-  const handleRatePlace = (id: number, rating: number) => {
-    const newPlaces = places.map((p) => (p.id === id ? { ...p, rating } : p));
-    setPlaces(newPlaces);
+  const {
+    trigger: savePlace, error: saveError,
+  } = useSWRMutation('places', updateById);
+
+  const handleDelete = async (id: number) => {
+    await deletePlace(id);
+  }
+
+  const handleRate = async (data: { id: number; name: string, rating: number }) => {
+    await savePlace(data);
   };
 
   return (
     <>
-      <h1>Places</h1>
-      <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-        {places
-          .sort((a, b) =>
-            a.name.toUpperCase().localeCompare(b.name.toUpperCase()),
-          )
-          .map((p) => (
-            <Place key={p.id} {...p} onDelete={handleDeletePlace} onRate={handleRatePlace} />
-          ))}
-      </div>
+      <h1 className="text-2xl font-semibold mb-6">Places</h1>
+      <AsyncData loading={isLoading} error={error ?? deleteError ?? saveError}>
+        <PlacesCards places={data} onRate={handleRate} onDelete={handleDelete} />
+      </AsyncData>
     </>
   );
-};
-
-export default PlacesList;
+}
