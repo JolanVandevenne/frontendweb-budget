@@ -1,7 +1,7 @@
 import axios from 'axios';
 import type { PaginatedResponse } from '../types';
 
-const baseUrl = 'http://localhost:9000/api';
+const baseUrl = import.meta.env.VITE_API_URL;
 
 export async function getAll<T>(url: string): Promise<T> {
   const { data } = await axios.get(`${baseUrl}/${url}`);
