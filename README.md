@@ -19,3 +19,7 @@ VITE_API_URL=http://localhost:9000/api
 ### Development
 
 - Start the app using `pnpm dev`. It runs on <http://localhost:5137> by default.
+
+### Testing
+
+- Start the playwright tests using `pnpm test:ui`. Make sure the backend is running and the database is seeded.
