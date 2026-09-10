@@ -34,7 +34,7 @@ const LabelSelectList = ({
   placeholder,
   ...rest
 }: LabelSelectListProps) => {
-  const { control } = useFormContext();
+  const { control, formState: { isSubmitting } } = useFormContext();
   return (
     <Controller
       control={control}
@@ -47,6 +47,7 @@ const LabelSelectList = ({
             items={items}
             onValueChange={field.onChange}
             onOpenChange={() => field.onBlur()}
+            disabled={isSubmitting}
             {...rest}
           >
             <SelectTrigger id={field.name}>

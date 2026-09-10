@@ -26,7 +26,7 @@ const LabelDatePicker = ({
   placeholder = 'Pick a date',
   ...rest
 }: LabelDatePickerFieldProps) => {
-  const { control } = useFormContext();
+  const { control, formState: { isSubmitting } } = useFormContext();
   return (
     <Controller
       control={control}
@@ -36,6 +36,7 @@ const LabelDatePicker = ({
           <FieldLabel id={field.name}>{label}</FieldLabel>
           <Popover>
             <PopoverTrigger
+              disabled={isSubmitting}
               render={
                 <Button
                   variant='outline'

@@ -19,7 +19,7 @@ const LabelInput = ({
   type,
   ...rest
 }: LabelInputProps) => {
-  const { control } = useFormContext();
+  const { control, formState: { isSubmitting } } = useFormContext();
   return (
     <Controller
       control={control}
@@ -31,6 +31,7 @@ const LabelInput = ({
             {...field}
             type={type}
             placeholder={placeholder}
+            disabled={isSubmitting}
             onChange={(e) =>
               field.onChange(
                 type === 'number' ? e.target.valueAsNumber : e.target.value,

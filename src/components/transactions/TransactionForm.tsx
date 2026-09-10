@@ -73,7 +73,7 @@ export default function TransactionForm({ places = [], transaction = EMPTY_TRANS
       : undefined,
   });
 
-  const { isValid } = form.formState;
+  const { isValid, isSubmitting } = form.formState;
 
   const onSubmit = async (values: TransactionFormValues) => {
     if (!isValid) return;
@@ -125,7 +125,7 @@ export default function TransactionForm({ places = [], transaction = EMPTY_TRANS
             />
           </FieldGroup>
           <div className="flex justify-end gap-2 pt-6">
-            <Button type="submit">
+            <Button type="submit" disabled={isSubmitting} >
               {transaction?.id ? 'Save transaction' : 'Add transaction'}
             </Button>
             <Link to="/transactions" className={cn(buttonVariants({ variant: 'outline' }))}>
