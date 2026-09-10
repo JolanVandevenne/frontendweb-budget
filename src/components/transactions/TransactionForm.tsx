@@ -1,28 +1,10 @@
 import type { Place, Transaction } from '../../types';
 import * as z from 'zod';
-import { Controller, useForm, FormProvider } from 'react-hook-form';
+import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
-  Field,
-  FieldLabel,
-  FieldGroup,
-  FieldError,
+  FieldGroup
 } from '@/components/ui/field';
-import {
-  Select,
-  SelectContent,
-  SelectTrigger,
-  SelectValue,
-  SelectItem,
-} from '@/components/ui/select';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-import { Calendar } from '@/components/ui/calendar';
-import { ChevronDownIcon } from 'lucide-react';
-import { LocalizedDate } from '../LocalizedDate';
 import useSWRMutation from 'swr/mutation';
 import { save } from '../../api';
 import Error from '../Error';
@@ -30,6 +12,8 @@ import { Link, useNavigate } from 'react-router';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import LabelInput from '../LabelInput';
+import LabelSelectList from '../LabelSelectList';
+import LabelDatePicker from '../LabelDatePicker';
 
 interface TransactionFormProps {
   places?: Place[];
@@ -128,73 +112,17 @@ export default function TransactionForm({ places = [], transaction = EMPTY_TRANS
               placeholder='0.00'
               type='number'
             />
-            <Controller
-              control={form.control}
-              name="placeId"
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={field.name}>Place</FieldLabel>
-                  <Select
-                    value={field.value || null}
-                    items={placesSelectItems}
-                    onValueChange={field.onChange}
-                    onOpenChange={() => field.onBlur()}
-                  >
-                    <SelectTrigger id={field.name} className="w-45">
-                      <SelectValue placeholder="Place" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {placesSelectItems.map((item) => (
-                        <SelectItem key={item.value} value={item.value}>
-                          {item.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                </Field>
-              )}
+            <LabelSelectList
+              label='Place'
+              name='placeId'
+              placeholder='Place'
+              items={placesSelectItems}
             />
-
-            <Controller
-              control={form.control}
+            <LabelDatePicker
+              label='Date'
               name='date'
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel id={field.name}>Date</FieldLabel>
-                  <Popover>
-                    <PopoverTrigger
-                      render={
-                        <Button
-                          variant='outline'
-                          data-empty={!field.value}
-                          className='justify-start text-left font-normal data-[empty=true]:text-muted-foreground'
-                        />
-                      }
-                      className='flex w-full justify-between'
-                    >
-                      {field.value ? (
-                        <LocalizedDate date={field.value} />
-                      ) : (
-                        <span>Pick a date</span>
-                      )}
-                      <ChevronDownIcon className='size-4' />
-                    </PopoverTrigger>
-                    <PopoverContent className='w-auto p-0'>
-                      <Calendar
-                        mode='single'
-                        selected={field.value}
-                        onSelect={field.onChange}
-                        weekStartsOn={1}
-                        disabled={{ after: new Date() }}
-                      />
-                    </PopoverContent>
-                  </Popover>
-                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                </Field>
-              )}
+              placeholder='Pick a date'
             />
-
           </FieldGroup>
           <div className="flex justify-end gap-2 pt-6">
             <Button type="submit">
