@@ -9,8 +9,10 @@ import useSWRMutation from 'swr/mutation';
 import { deleteById, getAllWithPaging } from '../../api';
 import { toast } from 'sonner';
 import type { KeyboardEvent, ChangeEvent } from 'react';
-import { Button } from '@/components/ui/button';
 import PaginationControls from '../../components/PaginationControls';
+import { Link } from 'react-router';
+import { Button, buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 
 
@@ -74,6 +76,10 @@ export default function TransactionList() {
             Search
           </Button>
         </div>
+
+        <Link to='/transactions/add' className={cn(buttonVariants())}>
+          Add transaction
+        </Link>
       </div>
 
       <AsyncData loading={isLoading} error={error ?? deleteError} hasData={data !== undefined}>

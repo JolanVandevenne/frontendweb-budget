@@ -36,3 +36,10 @@ export const updateById = async (
   await axios.put(`${baseUrl}/${url}/${id}`, data);
 };
 
+
+export const save = async <T>(
+  url: string,
+  { arg }: { arg: T },
+): Promise<void> => {
+  await axios.post(`${baseUrl}/${url}`, arg);
+};

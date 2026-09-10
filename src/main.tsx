@@ -7,9 +7,9 @@ import PlacesList from './pages/places/PlacesList';
 import About, { History, Location, Services } from './pages/about/AboutTabs.tsx';
 import NotFound from './pages/NotFound';
 import PlaceDetail from './pages/places/PlaceDetail.tsx';
-
 import Layout from './components/Layout.tsx';
-// ...
+import AddOrEditTransaction from './pages/transactions/AddOrEditTransaction.tsx';
+
 const router = createBrowserRouter([
   {
     element: <Layout />,
@@ -18,7 +18,23 @@ const router = createBrowserRouter([
         path: '/',
         element: <Navigate replace to='/transactions' />,
       },
-      { path: '/transactions', element: <TransactionList /> },
+      {
+        path: '/transactions',
+        children: [
+          {
+            index: true,
+            element: <TransactionList />,
+          },
+          {
+            path: 'add',
+            element: <AddOrEditTransaction />,
+          },
+          {
+            path: 'edit/:id',
+            element: <AddOrEditTransaction />,
+          },
+        ],
+      },
       {
         path: '/places',
         children: [
