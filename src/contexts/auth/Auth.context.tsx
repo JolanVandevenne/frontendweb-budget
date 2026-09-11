@@ -1,5 +1,5 @@
 import {
-  useState,
+  useState
 } from 'react';
 import useSWRMutation from 'swr/mutation';
 import * as api from '../../api';
@@ -32,6 +32,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     error: loginError,
   } = useSWRMutation('sessions', api.post);
 
+  const {
+    isMutating: registerLoading,
+    error: registerError,
+    trigger: doRegister,
+  } = useSWRMutation('users', api.post);
+
   const setSession = (newToken: string) => {
     setToken(newToken);
     localStorage.setItem(JWT_TOKEN_KEY, newToken);
@@ -51,6 +57,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  const register = async (data: { name: string; email: string; password: string }): Promise<boolean> => {
+    try {
+      const { token: newToken } = await doRegister(data) as { token: string };
+      setSession(newToken);
+      return true;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  }
+
 
   const logout = () => {
     setToken(null);
@@ -61,12 +78,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const value = {
     token,
     user,
-    error: loginError || userError,
-    loading: loginLoading || userLoading,
+    error: loginError || userError || registerError,
+    loading: loginLoading || userLoading || registerLoading,
     isAuthed: Boolean(token),
     ready: !userLoading,
     login,
     logout,
+    register,
   };
 
 

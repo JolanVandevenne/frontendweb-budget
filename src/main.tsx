@@ -14,6 +14,7 @@ import { AuthProvider } from './contexts/auth/Auth.context.tsx';
 import Login from './pages/Login.tsx';
 import PrivateRoute from './components/PrivateRoute.tsx';
 import Logout from './pages/Logout.tsx';
+import Register from './pages/Register.tsx';
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
       {
         path: '/login',
         element: <Login />,
+      },
+      {
+        path: '/register',
+        element: <Register />,
       },
       {
         path: '/logout',

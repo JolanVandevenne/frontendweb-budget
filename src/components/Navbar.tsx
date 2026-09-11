@@ -44,6 +44,9 @@ const AuthButtons = () => {
       <Link to="/login" className={cn(buttonVariants({ size: 'sm' }))}>
         Login
       </Link>
+      <Link to="/register" className={cn(buttonVariants({ size: 'sm' }))}>
+        Register
+      </Link>
     </>
   );
 };

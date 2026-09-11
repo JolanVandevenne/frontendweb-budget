@@ -15,6 +15,7 @@ interface AuthContextType {
   ready: boolean,
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
+  register: (data: { name: string; email: string; password: string }) => Promise<boolean>;
 }
 
 export const JWT_TOKEN_KEY = 'jwtToken';
