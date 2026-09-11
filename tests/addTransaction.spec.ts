@@ -31,10 +31,6 @@ test('should add a transaction', async ({ page }) => {
   await page.getByTestId('amount-input').fill('200');
   await page.getByTestId('amount-input').blur();
 
-  // Fill in user id
-  await page.getByTestId('user-input').fill('1');
-  await page.getByTestId('user-input').blur();
-
   await page
     .getByRole('button', { name: 'Add transaction' })
     .click({ timeout: 2000 });
