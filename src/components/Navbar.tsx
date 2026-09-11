@@ -9,7 +9,9 @@ import {
 } from '@/components/ui/navigation-menu';
 import { useTheme } from '../contexts/theme';
 import { PiggyBankIcon, Moon, Sun, Menu, X } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
+import { useAuth } from '../contexts/auth';
+import { cn } from '@/lib/utils';
 
 const links = [
   { to: '/transactions', label: 'Transactions' },
@@ -28,6 +30,21 @@ const ThemeToggle = () => {
     >
       {isDark ? <Moon className='h-4 w-4' /> : <Sun className='h-4 w-4' />}
     </Button>
+  );
+};
+
+const AuthButtons = () => {
+  const { isAuthed } = useAuth();
+  return isAuthed ? (
+    <Link to="/logout" className={cn(buttonVariants({ variant: 'outline', size: 'sm' }))}>
+      Logout
+    </Link>
+  ) : (
+    <>
+      <Link to="/login" className={cn(buttonVariants({ size: 'sm' }))}>
+        Login
+      </Link>
+    </>
   );
 };
 
@@ -71,6 +88,7 @@ export default function Navbar() {
           <NavMenu />
         </div>
         <div className="hidden md:flex items-center gap-2 ml-auto">
+          <AuthButtons />
           <ThemeToggle />
         </div>
 
@@ -88,6 +106,7 @@ export default function Navbar() {
           <div className="container mx-auto px-4 py-4 max-w-5xl">
             <NavMenu vertical />
             <div className="flex items-center gap-2 pt-2 border-t w-full">
+              <AuthButtons />
               <ThemeToggle />
             </div>
           </div>

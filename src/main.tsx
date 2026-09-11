@@ -13,6 +13,7 @@ import { ThemeProvider } from './contexts/theme/Theme.context.tsx';
 import { AuthProvider } from './contexts/auth/Auth.context.tsx';
 import Login from './pages/Login.tsx';
 import PrivateRoute from './components/PrivateRoute.tsx';
+import Logout from './pages/Logout.tsx';
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
       {
         path: '/login',
         element: <Login />,
+      },
+      {
+        path: '/logout',
+        element: <Logout />,
       },
       {
         path: '/transactions',
