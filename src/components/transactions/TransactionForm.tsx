@@ -29,9 +29,6 @@ const EMPTY_TRANSACTION: Partial<Transaction> = {
 };
 
 const formSchema = z.object({
-  userId: z
-    .number({ error: 'User Id is required and must be a number' })
-    .min(1, 'User Id must be minimum 1'),
   amount: z
     .number({ error: 'Amount is required and must be a number' })
     .refine((value) => !isNaN(value), {
@@ -61,14 +58,12 @@ export default function TransactionForm({ places = [], transaction = EMPTY_TRANS
       date: transaction?.date ? new Date(transaction.date) : new Date(),
       placeId: transaction?.place.id,
       amount: transaction?.amount ?? 0,
-      userId: transaction?.user.id
     },
     values: transaction
       ? {
         date: transaction?.date ? new Date(transaction.date) : new Date(),
         placeId: transaction.place.id,
         amount: transaction.amount,
-        userId: transaction.user.id
       }
       : undefined,
   });
@@ -100,13 +95,6 @@ export default function TransactionForm({ places = [], transaction = EMPTY_TRANS
       <FormProvider {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <FieldGroup>
-            <LabelInput
-              label='User Id'
-              name='userId'
-              placeholder='user id'
-              type='number'
-              data-testid="user-input"
-            />
             <LabelInput
               label='amount'
               name='amount'
