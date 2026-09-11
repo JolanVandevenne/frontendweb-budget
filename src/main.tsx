@@ -10,6 +10,8 @@ import PlaceDetail from './pages/places/PlaceDetail.tsx';
 import Layout from './components/Layout.tsx';
 import AddOrEditTransaction from './pages/transactions/AddOrEditTransaction.tsx';
 import { ThemeProvider } from './contexts/theme/Theme.context.tsx';
+import { AuthProvider } from './contexts/auth/Auth.context.tsx';
+import Login from './pages/Login.tsx';
 
 const router = createBrowserRouter([
   {
@@ -18,6 +20,10 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <Navigate replace to='/transactions' />,
+      },
+      {
+        path: '/login',
+        element: <Login />,
       },
       {
         path: '/transactions',
@@ -82,8 +88,10 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <ThemeProvider>
-      <RouterProvider router={router} />
-    </ThemeProvider>
+    <AuthProvider>
+      <ThemeProvider>
+        <RouterProvider router={router} />
+      </ThemeProvider>
+    </AuthProvider>
   </StrictMode>,
 );
