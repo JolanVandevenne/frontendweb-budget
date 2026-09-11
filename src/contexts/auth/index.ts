@@ -11,6 +11,8 @@ interface AuthContextType {
   user: AuthUser | undefined;
   error: Error | undefined;
   loading: boolean;
+  isAuthed: boolean,
+  ready: boolean,
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
 }

@@ -63,6 +63,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     user,
     error: loginError || userError,
     loading: loginLoading || userLoading,
+    isAuthed: Boolean(token),
+    ready: !userLoading,
     login,
     logout,
   };

@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/card';
 import { FieldGroup } from '@/components/ui/field';
 import LabelInput from '../components/LabelInput';
-import { useNavigate } from 'react-router';
+import { useNavigate, useLocation } from 'react-router';
 import { useAuth } from '../contexts/auth';
 import Error from '../components/Error';
 
@@ -25,6 +25,7 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 export default function Login() {
   const { error, loading, login } = useAuth();
   const navigate = useNavigate();
+  const { search } = useLocation();
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -37,7 +38,13 @@ export default function Login() {
   const handleLogin = async ({ email, password }: LoginFormValues) => {
     const loggedIn = await login(email, password);
     if (loggedIn) {
-      navigate('/', { replace: true });
+      const params = new URLSearchParams(search);
+      const redirect = params.get('redirect');
+      const safePath =
+        redirect?.startsWith('/') && !redirect.startsWith('//')
+          ? redirect
+          : '/';
+      navigate(safePath, { replace: true });
     }
   };
 
