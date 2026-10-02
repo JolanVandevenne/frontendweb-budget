@@ -1,18 +1,12 @@
-
-import  TRANSACTION_DATA from './api/mock_data';
-import Transaction from './components/transactions/Transaction';
-import type { Transaction as TransactionType } from './types';
+import PlacesList from './components/places/PlacesList';
+import TransactionList from './components/transactions/TransactionList';
 
 function App() {
   return (
     <div className='bg-white text-gray-900'>
-      <h1 className='text-2xl font-bold text-center mb-4'>
-        Mijn Budget App
-      </h1>
-      {TRANSACTION_DATA.map((trans: TransactionType) => (
-        <Transaction key={trans.id} {...trans} />
-      ))
-      }
+      <h1 className='text-2xl font-bold text-center mb-4'>Mijn Budget App</h1>
+      <TransactionList/>
+      <PlacesList/>
     </div >
   );
 }

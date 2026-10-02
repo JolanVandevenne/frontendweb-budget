@@ -1,7 +1,25 @@
 // src/api/mock_data.ts
-import type { Transaction } from '../types';
+import type { Place, Transaction } from '../types';
 
-const TRANSACTION_DATA: Transaction[] = [
+export const PLACE_DATA: Place[] = [
+  {
+    id: 1,
+    name: 'Loon',
+    rating: 5,
+  },
+  {
+    id: 2,
+    name: 'Dranken Geers',
+    rating: 3,
+  },
+  {
+    id: 3,
+    name: 'De Oude Markt',
+    rating: 4,
+  },
+];
+
+export const TRANSACTION_DATA: Transaction[] = [
   {
     id: 1,
     amount: 3500,
@@ -31,5 +49,3 @@ const TRANSACTION_DATA: Transaction[] = [
     },
   },
 ];
-
-export default TRANSACTION_DATA;
