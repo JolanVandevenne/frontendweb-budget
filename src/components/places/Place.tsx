@@ -3,6 +3,7 @@ import {Card, CardAction, CardContent, CardHeader, CardTitle} from '@/components
 import {Button} from '@/components/ui/button.tsx'
 import StarRating from './StarRating.tsx'
 import { Trash } from 'lucide-react'
+import { Link } from 'react-router'
 
 interface PlaceProps extends PlaceType{
     onDelete : (id:number) => void
@@ -21,7 +22,11 @@ const Place = ({ id, name, rating, onDelete, onRate}: PlaceProps) => {
     return( 
         <Card>
             <CardHeader className='pb-2'>
-                <CardTitle className='text-base'>{name}</CardTitle>
+                <CardTitle className='text-base'>
+                    <Link to={`/places/${id}`} className='hover:underline'>
+                        {name}
+                    </Link>
+                </CardTitle>
                 <CardAction>
                     <Button 
                         variant="link"

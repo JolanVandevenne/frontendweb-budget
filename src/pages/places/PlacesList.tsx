@@ -1,5 +1,5 @@
 import { PLACE_DATA } from '@/api/mock_data';
-import  Place  from './Place'
+import  Place  from '@/components/places/Place'
 import { useState } from 'react';
 
 export default function PlacesList(){

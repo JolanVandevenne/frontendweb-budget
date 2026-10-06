@@ -3,7 +3,7 @@ import type { Transaction as TransactionType } from "@/types";
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { useState, useMemo } from "react";
-import TransactionTable from './TransactionTable'
+import TransactionTable from '@/components/transactions/TransactionTable'
 
 export default function TransactionList(){
     const [text, setText] = useState('');
