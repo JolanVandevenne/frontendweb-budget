@@ -4,6 +4,7 @@ import {Button} from '@/components/ui/button.tsx'
 import StarRating from './StarRating.tsx'
 import { Trash } from 'lucide-react'
 import { Link } from 'react-router'
+import { cn } from '@/lib/utils';
 
 interface PlaceProps extends PlaceType{
     onDelete : (id:number) => void
@@ -31,7 +32,7 @@ const Place = ({ id, name, rating, onDelete, onRate}: PlaceProps) => {
                     <Button 
                         variant="link"
                         size="icon" 
-                        className="text-destructive hover:text-destructive" 
+                        className={cn('cursor-pointer', 'text-destructive hover:text-destructive')}
                         onClick = {handleDelete}>
                         <Trash/>
                     </Button>
