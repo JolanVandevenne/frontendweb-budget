@@ -129,4 +129,8 @@
   html {
     @apply font-sans;
   }
+
+  h1 {
+    @apply text-2xl font-semibold mb-6;
+  }
 }
